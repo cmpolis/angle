@@ -47,7 +47,31 @@ class Angle.ChartBase
 
     #
     @initialize(options) if @initialize?
+    @fetchOrRender options.data
 
+  ###
+  ###
+
+  fetchOrRender: (data) =>
+    
+    # Array or hash passed in
+    if typeof data is 'object'
+      @data = data
+      @render()
+
+    # URL passed in
+    else if typeof data is 'string'
+      @dataUrl = data
+      extension = @dataUrl.match(/\.[0-9a-z]+$/i)[0].toLowerCase()
+      unless _.contains "text json xml csv tsv".split(' '), extension
+        throw "Data url has invalid extension: #{extension}"
+
+      # Call d3.json, d3.csv, d3.tsv, etc...
+      d3[extension] @dataUrl, (error, remoteData) ->
+        throw error if error?
+        @data = remoteData
+        @render()
+  
   ###
   ###
 

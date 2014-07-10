@@ -24,6 +24,7 @@
         options = {};
       }
       this.render = __bind(this.render, this);
+      this.fetchOrRender = __bind(this.fetchOrRender, this);
       if (!(options.el && (this.el = d3.select(options.el)[0]))) {
         throw "DOM Element not found, pass in a valid selector as `el`";
       }
@@ -51,7 +52,33 @@
       if (this.initialize != null) {
         this.initialize(options);
       }
+      this.fetchOrRender(options.data);
     }
+
+    /*
+    */
+
+
+    ChartBase.prototype.fetchOrRender = function(data) {
+      var extension;
+      if (typeof data === 'object') {
+        this.data = data;
+        return this.render();
+      } else if (typeof data === 'string') {
+        this.dataUrl = data;
+        extension = this.dataUrl.match(/\.[0-9a-z]+$/i)[0].toLowerCase();
+        if (!_.contains("text json xml csv tsv".split(' '), extension)) {
+          throw "Data url has invalid extension: " + extension;
+        }
+        return d3[extension](this.dataUrl, function(error, remoteData) {
+          if (error != null) {
+            throw error;
+          }
+          this.data = remoteData;
+          return this.render();
+        });
+      }
+    };
 
     /*
     */
