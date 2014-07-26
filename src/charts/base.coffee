@@ -61,17 +61,48 @@ class Angle.ChartBase
 
     # URL passed in
     else if typeof data is 'string'
-      @dataUrl = data
-      extension = @dataUrl.match(/\.[0-9a-z]+$/i)[0].toLowerCase()
-      unless _.contains "text json xml csv tsv".split(' '), extension
-        throw "Data url has invalid extension: #{extension}"
-
-      # Call d3.json, d3.csv, d3.tsv, etc...
-      d3[extension] @dataUrl, (error, remoteData) ->
-        throw error if error?
-        @data = remoteData
+      @fetch data, () ->
         @render()
+
+  ###
+  ###
+
+  fetch: (url, next) =>
+    @dataUrl = data
+    extension = @dataUrl.match(/\.[0-9a-z]+$/i)[0].toLowerCase()
+    unless _.contains "text json xml csv tsv".split(' '), extension
+      throw "Data url has invalid extension: #{extension}"
+
+    # Call d3.json, d3.csv, d3.tsv, etc...
+    d3[extension] @dataUrl, (error, data) ->
+      throw error if error?
+      @data = data
+      @afterFetch() if @afterFetch?
+      @next() if @next?
   
+  ###
+  ###
+
+  xAxis: (options = {}) =>
+    options = _.extend options,
+      orientation: 'bottom'
+      scale: @xScale
+      ticks: 10
+    d3.svg.axis
+      .scale options.scale
+      .ticks options.ticks
+      .orient options.orientation
+
+  yAxis: (options = {}) =>
+    options = _.extend options,
+      orientation: 'left'
+      scale: @yScale
+      ticks: 10
+    d3.svg.axis
+      .scale options.scale
+      .ticks options.ticks
+      .orient options.orientation
+
   ###
   ###
 
