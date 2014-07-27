@@ -1,1 +1,1 @@
-puts '/util dir'
+console.log '/util dir'

@@ -1,0 +1,35 @@
+!!!
+%html
+  %head
+    %title AngleCharts All Test: Visual inspection of all charts
+    %script(src='http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js')
+    %script(src='http://cdnjs.cloudflare.com/ajax/libs/d3/3.4.11/d3.min.js')
+    %script(src='../../angle.js')
+    %link(rel='stylesheet' type='text/css' href='../style.css')
+
+  %body
+    %h1 AngleCharts Test: Visual inspection of all charts
+
+    %h3 Palette
+    #palette
+
+    %h3 Angle.BarChart
+    #bar-chart
+  
+    %h3 Angle.LineChart
+    #line-chart
+
+    %h3 Angle.OHLCChart
+    #ohlc-chart
+
+    %h3 Angle.ScatterPlot
+    #scatter-plot
+
+    %h3 Angle.Slopeograph
+    #slopeograph
+
+    %h3 Angle.Sparkline
+    #sparkline
+
+    / Load last -> no need for onload()
+    %script(src='all.js')

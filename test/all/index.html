@@ -1,11 +1,16 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>AngleCharts Test: Visual inspection of all charts</title>
-    <script src='test.js'></script>
+    <title>AngleCharts All Test: Visual inspection of all charts</title>
+    <script src='http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js'></script>
+    <script src='http://cdnjs.cloudflare.com/ajax/libs/d3/3.4.11/d3.min.js'></script>
+    <script src='../../angle.js'></script>
+    <link href='../style.css' rel='stylesheet' type='text/css'>
   </head>
   <body>
     <h1>AngleCharts Test: Visual inspection of all charts</h1>
+    <h3>Palette</h3>
+    <div id='palette'></div>
     <h3>Angle.BarChart</h3>
     <div id='bar-chart'></div>
     <h3>Angle.LineChart</h3>
@@ -18,5 +23,7 @@
     <div id='slopeograph'></div>
     <h3>Angle.Sparkline</h3>
     <div id='sparkline'></div>
+    <!-- Load last -> no need for onload() -->
+    <script src='all.js'></script>
   </body>
 </html>

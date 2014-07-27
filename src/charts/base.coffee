@@ -2,7 +2,7 @@
 #
 # Abstract class to be extended by chart types
 
-class Angle.ChartBase
+Angle.ChartBase = class Angle.ChartBase
   
   # Defaults
   padding:
@@ -19,11 +19,13 @@ class Angle.ChartBase
   constructor: (options = {}) ->
 
     #
-    unless options.el and (@el = d3.select(options.el)[0])
+    unless options.el and (@el = d3.select(options.el))
       throw "DOM Element not found, pass in a valid selector as `el`"
 
     #
-    @svg = @el.append 'svg'
+    @svg = @el.append('svg')
+      .append('g')
+      .attr('transform', "translate(#{@padding.left},#{@padding.top})")
 
     #
     _.extend @padding, Angle.settings.padding if Angle.settings.padding?
@@ -32,18 +34,20 @@ class Angle.ChartBase
     #
     if options.height
       @height = options.height
-    else if (elHeight = parseInt(d3.select('#ohlc').style('height'))) > 0
+    else if (elHeight = parseInt(@el.style('height'))) > 0
       @height = elHeight
-    else if Angle.settings.height
+    else if Angle.settings.height?
       @height = Angle.settings.height
+    @height = @height - @padding.top - @padding.bottom
 
     #
     if options.width
-      @width = options.height
-    else if (elWidth = parseInt(d3.select('#ohlc').style('width'))) > 0
+      @width = options.width
+    else if (elWidth = parseInt(@el.style('width'))) > 0
       @width = elWidth
-    else if Angle.settings.width
-      @width = Angle.settings.height
+    else if Angle.settings.width?
+      @width = Angle.settings.width
+    @width = @width - @padding.right - @padding.left
 
     #
     @initialize(options) if @initialize?
@@ -57,6 +61,7 @@ class Angle.ChartBase
     # Array or hash passed in
     if typeof data is 'object'
       @data = data
+      @afterFetch() if @afterFetch?
       @render()
 
     # URL passed in
@@ -74,7 +79,7 @@ class Angle.ChartBase
       throw "Data url has invalid extension: #{extension}"
 
     # Call d3.json, d3.csv, d3.tsv, etc...
-    d3[extension] @dataUrl, (error, data) ->
+    d3[extension] @dataUrl, (error, data) =>
       throw error if error?
       @data = data
       @afterFetch() if @afterFetch?
@@ -88,20 +93,20 @@ class Angle.ChartBase
       orientation: 'bottom'
       scale: @xScale
       ticks: 10
-    d3.svg.axis
-      .scale options.scale
-      .ticks options.ticks
-      .orient options.orientation
+    d3.svg.axis()
+      .scale(options.scale)
+      .ticks(options.ticks)
+      .orient(options.orientation)
 
   yAxis: (options = {}) =>
     options = _.extend options,
       orientation: 'left'
       scale: @yScale
       ticks: 10
-    d3.svg.axis
-      .scale options.scale
-      .ticks options.ticks
-      .orient options.orientation
+    d3.svg.axis()
+      .scale(options.scale)
+      .ticks(options.ticks)
+      .orient(options.orientation)
 
   ###
   ###

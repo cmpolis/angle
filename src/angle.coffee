@@ -1,1 +1,1 @@
-Angle = {}
+window.Angle = {}

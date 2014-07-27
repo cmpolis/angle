@@ -2,19 +2,19 @@
 #
 # A simple, single series line chart
 
-class Angle.LineChart
+Angle.LineChart = class Angle.LineChart extends Angle.ChartBase
 
   ###
   ###
 
   interpolate: 'linear'
-  xAccess: (d) -> d[0]
-  yAccess: (d) -> d[1]
+  xAccessor: (d) -> d[0]
+  yAccessor: (d) -> d[1]
 
   ###
   ###
 
-  initialize: (options) ->
+  initialize: (options) =>
     console.log 'init line chart'
 
     #
@@ -24,43 +24,44 @@ class Angle.LineChart
   ###
   ###
 
-  afterFetch: () ->
+  afterFetch: () =>
     @transform() if  @transform?
 
     # Build scales
-    if @xAccess(@data[0]) instanceof Date
-      @xScale = d3.time.scale()
+    if @xAccessor(@data[0]) instanceof Date
+      @xScale = x = d3.time.scale()
         .range [0, @width]
         .domain d3.extent(@data, @xAccessor)
     else
-      @xScale = d3.scale.linear()
-        .range [0, @width]
-        .domain d3.extent(@data, @xAccessor)
-    @yScale = d3.scale.liner()
-      .range [@height, 0]
-      .domain d3.extent(@data, @yAccessor)
+      @xScale = x = d3.scale.linear()
+        .range([0, @width])
+        .domain(d3.extent(@data, @xAccessor))
+    @yScale = y = d3.scale.linear()
+      .range([@height, 0])
+      .domain(d3.extent(@data, @yAccessor))
 
     # Line
     @line = d3.svg.line()
-      .interpolate @interpolate
-      .x @xAccessor
-      .y @yAccessor
+      .interpolate(@interpolate)
+      .x((d) => x(@xAccessor(d)))
+      .y((d) => y(@yAccessor(d)))
 
   ###
   ###
 
-  render: () ->
+  render: () =>
 
     # Render x axis
-    @svg.append 'g'
-      .attr 'class', 'x axis'
-      .call xAxis()
+    @svg.append('g')
+      .attr('class', 'x axis')
+      .attr('transform', "translate(0, #{@height})")
+      .call(@xAxis())
 
     # Render y axis
-    @svg.append 'g'
-      .attr 'class', 'y axis'
-      .call yAxis()
+    @svg.append('g')
+      .attr('class', 'y axis')
+      .call(@yAxis())
 
     # Render data lines
-    @svg.append 'path'
-      .attr 'd', @line(@data)
+    @svg.append('path')
+      .attr('d', @line(@data))

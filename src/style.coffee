@@ -1,4 +1,4 @@
-class Angle.Style
+Angle.style =
 
   #
   # Generated from http://tools.medialab.sciences-po.fr/iwanthue/

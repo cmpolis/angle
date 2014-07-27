@@ -4,16 +4,20 @@
 
 test = () ->
 
-  #
+  ###
   @barChart = new Angle.BarChart
     el: '#bar-chart'
     data: []
+  ###
 
   #
   @lineChart = new Angle.LineChart
     el: '#line-chart'
-    data: []
+    height: 360
+    width: 720
+    data: [[1,30],[2,50],[3,35],[4,40],[5,52]]
 
+  ###
   #
   @ohlcChart = new Angle.OHLCChart
     el: '#ohlc-chart'
@@ -33,5 +37,6 @@ test = () ->
   @sparkline = new Angle.Sparkline
     el: '#sparkline'
     data: []
+  ###
 
 test()
