@@ -23,11 +23,6 @@ Angle.ChartBase = class Angle.ChartBase
       throw "DOM Element not found, pass in a valid selector as `el`"
 
     #
-    @svg = @el.append('svg')
-      .append('g')
-      .attr('transform', "translate(#{@padding.left},#{@padding.top})")
-
-    #
     _.extend @padding, Angle.settings.padding if Angle.settings.padding?
     _.extend @padding, options if options.padding?
 
@@ -38,7 +33,6 @@ Angle.ChartBase = class Angle.ChartBase
       @height = elHeight
     else if Angle.settings.height?
       @height = Angle.settings.height
-    @height = @height - @padding.top - @padding.bottom
 
     #
     if options.width
@@ -47,7 +41,16 @@ Angle.ChartBase = class Angle.ChartBase
       @width = elWidth
     else if Angle.settings.width?
       @width = Angle.settings.width
+
+    #
+    @svg = @el.append('svg')
+      .style({height: @height, width: @width})
+      .append('g')
+      .attr('transform', "translate(#{@padding.left},#{@padding.top})")
+
+    #
     @width = @width - @padding.right - @padding.left
+    @height = @height - @padding.top - @padding.bottom
 
     #
     @initialize(options) if @initialize?

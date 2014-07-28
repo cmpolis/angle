@@ -58,7 +58,6 @@
       if (!(options.el && (this.el = d3.select(options.el)))) {
         throw "DOM Element not found, pass in a valid selector as `el`";
       }
-      this.svg = this.el.append('svg').append('g').attr('transform', "translate(" + this.padding.left + "," + this.padding.top + ")");
       if (Angle.settings.padding != null) {
         _.extend(this.padding, Angle.settings.padding);
       }
@@ -72,7 +71,6 @@
       } else if (Angle.settings.height != null) {
         this.height = Angle.settings.height;
       }
-      this.height = this.height - this.padding.top - this.padding.bottom;
       if (options.width) {
         this.width = options.width;
       } else if ((elWidth = parseInt(this.el.style('width'))) > 0) {
@@ -80,7 +78,12 @@
       } else if (Angle.settings.width != null) {
         this.width = Angle.settings.width;
       }
+      this.svg = this.el.append('svg').style({
+        height: this.height,
+        width: this.width
+      }).append('g').attr('transform', "translate(" + this.padding.left + "," + this.padding.top + ")");
       this.width = this.width - this.padding.right - this.padding.left;
+      this.height = this.height - this.padding.top - this.padding.bottom;
       if (this.initialize != null) {
         this.initialize(options);
       }
@@ -236,6 +239,8 @@
       if (this.transform != null) {
         this.transform();
       }
+      console.log(this.width);
+      console.log(this.height);
       if (this.xAccessor(this.data[0]) instanceof Date) {
         this.xScale = x = d3.time.scale().range([0, this.width].domain(d3.extent(this.data, this.xAccessor)));
       } else {

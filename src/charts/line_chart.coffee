@@ -26,6 +26,8 @@ Angle.LineChart = class Angle.LineChart extends Angle.ChartBase
 
   afterFetch: () =>
     @transform() if  @transform?
+    console.log @width
+    console.log @height
 
     # Build scales
     if @xAccessor(@data[0]) instanceof Date
