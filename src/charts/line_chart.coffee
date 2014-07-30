@@ -30,21 +30,21 @@ Angle.LineChart = class Angle.LineChart extends Angle.ChartBase
     # Build scales
     if @xAccessor(@data[0]) instanceof Date
       @xScale = x = d3.time.scale()
-        .range [0, @width]
+        .range  [0, @width]
         .domain d3.extent(@data, @xAccessor)
     else
       @xScale = x = d3.scale.linear()
-        .range([0, @width])
-        .domain(d3.extent(@data, @xAccessor))
+        .range  [0, @width]
+        .domain d3.extent(@data, @xAccessor)
     @yScale = y = d3.scale.linear()
-      .range([@height, 0])
-      .domain(d3.extent(@data, @yAccessor))
+      .range  [@height, 0]
+      .domain d3.extent(@data, @yAccessor)
 
     # Line
     @line = d3.svg.line()
-      .interpolate(@interpolate)
-      .x((d) => x(@xAccessor(d)))
-      .y((d) => y(@yAccessor(d)))
+      .interpolate @interpolate
+      .x (d) => x(@xAccessor(d))
+      .y (d) => y(@yAccessor(d))
 
   ###
   ###
@@ -52,16 +52,16 @@ Angle.LineChart = class Angle.LineChart extends Angle.ChartBase
   render: () =>
 
     # Render x axis
-    @svg.append('g')
-      .attr('class', 'x axis')
-      .attr('transform', "translate(0, #{@height})")
-      .call(@xAxis())
+    @svg.append 'g'
+      .attr 'class', 'x axis'
+      .attr 'transform', "translate(0, #{@height})"
+      .call @xAxis()
 
     # Render y axis
-    @svg.append('g')
-      .attr('class', 'y axis')
-      .call(@yAxis())
+    @svg.append 'g'
+      .attr 'class', 'y axis'
+      .call @yAxis()
 
     # Render data lines
-    @svg.append('path')
-      .attr('d', @line(@data))
+    @svg.append 'path'
+      .attr 'd', @line(@data)

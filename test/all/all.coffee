@@ -6,17 +6,17 @@ test = () ->
 
   #
   @barChart = new Angle.BarChart
-    el: '#bar-chart'
+    el:     '#bar-chart'
     height: 360
-    width: 720
-    data: [[1,30],[2,50],[3,35],[4,40],[5,52]]
+    width:  720
+    data:   [[1,30],[2,50],[3,35],[4,40],[5,52]]
 
   #
   @lineChart = new Angle.LineChart
-    el: '#line-chart'
+    el:     '#line-chart'
     height: 360
-    width: 720
-    data: [[1,30],[2,50],[3,35],[4,40],[5,52]]
+    width:  720
+    data:   [[1,30],[2,50],[3,35],[4,40],[5,52]]
 
   ###
   #

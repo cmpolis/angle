@@ -43,10 +43,10 @@ Angle.ChartBase = class Angle.ChartBase
       @width = Angle.settings.width
 
     #
-    @svg = @el.append('svg')
-      .style({height: @height, width: @width})
-      .append('g')
-      .attr('transform', "translate(#{@padding.left},#{@padding.top})")
+    @svg = @el.append 'svg'
+      .style height: @height, width: @width
+      .append 'g'
+        .attr 'transform', "translate(#{@padding.left},#{@padding.top})"
 
     #
     @width = @width - @padding.right - @padding.left
@@ -97,9 +97,9 @@ Angle.ChartBase = class Angle.ChartBase
       scale: @xScale
       ticks: 10
     d3.svg.axis()
-      .scale(options.scale)
-      .ticks(options.ticks)
-      .orient(options.orientation)
+      .scale  options.scale
+      .ticks  options.ticks
+      .orient options.orientation
 
   yAxis: (options = {}) =>
     options = _.extend options,
@@ -107,9 +107,9 @@ Angle.ChartBase = class Angle.ChartBase
       scale: @yScale
       ticks: 10
     d3.svg.axis()
-      .scale(options.scale)
-      .ticks(options.ticks)
-      .orient(options.orientation)
+      .scale  options.scale
+      .ticks  options.ticks
+      .orient options.orientation
 
   ###
   ###
