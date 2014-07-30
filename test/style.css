@@ -1,11 +1,16 @@
 path, line {
   fill: none;
-  stroke-width: 2px;
-  stroke: #333333; }
+  stroke-width: 2.5px;
+  stroke: #80bec7; }
+
+rect {
+  fill: #80bec7; }
 
 .axis .tick line {
+  stroke: #333333;
   stroke-width: 1px; }
 .axis .tick text {
   font-size: 13px; }
 .axis path {
+  stroke: #333333;
   stroke-width: 1px; }

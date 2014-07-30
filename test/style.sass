@@ -1,13 +1,22 @@
+$dataColor: #80BEC7
+$black:     #333
+$grid:      #BBB
+
 path, line
   fill: none
-  stroke-width: 2px
-  stroke: #333
+  stroke-width: 2.5px
+  stroke: $dataColor
+
+rect
+  fill: $dataColor
 
 .axis
   .tick
     line
+      stroke: $black
       stroke-width: 1px
     text
       font-size: 13px
   path
+    stroke: $black
     stroke-width: 1px

@@ -1,4 +1,4 @@
-Angle.style =
+Angle.style = new class _Style
 
   #
   # Generated from http://tools.medialab.sciences-po.fr/iwanthue/
@@ -14,12 +14,13 @@ Angle.style =
     ndx = Math.floor(Math.random() * @palette.length) unless ndx?
 
     # normal -> brighter -> darker
-    if ndx < palette.length
+    if ndx < @palette.length
       @palette[ndx]
-    else if ndx < palette.length * 2
+    else if ndx < @palette.length * 2
       d3.rgb(@palette[ndx % palette.length]).brighter()
-    else if ndx < palette.length * 2
+    else if ndx < @palette.length * 2
       d3.rgb(@palette[ndx % palette.length]).darker()
 
     # Outside palette bounds
-    @color(ndx % (@palette.length * 3))
+    else
+      @color(ndx % (@palette.length * 3))
