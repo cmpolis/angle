@@ -15,9 +15,6 @@ Angle.LineChart = class Angle.LineChart extends Angle.ChartBase
   ###
 
   initialize: (options) =>
-    console.log 'init line chart'
-
-    #
     for property in ['interpolate', 'yAccessor', 'xAccessor', 'transform']
       @[property] = options[property] if options[property]?
 

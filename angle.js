@@ -97,6 +97,14 @@
       if (this.initialize != null) {
         this.initialize(options);
       }
+      this.render = _.wrap(this.render, (function(_this) {
+        return function(renderFunc) {
+          renderFunc();
+          if (_this.afterRender != null) {
+            return _this.afterRender(_this);
+          }
+        };
+      })(this));
       this.fetchOrRender(options.data);
     }
 
@@ -282,6 +290,7 @@
     function LineChart() {
       this.render = __bind(this.render, this);
       this.afterFetch = __bind(this.afterFetch, this);
+      this.afterRender = __bind(this.afterRender, this);
       this.initialize = __bind(this.initialize, this);
       return LineChart.__super__.constructor.apply(this, arguments);
     }
@@ -318,6 +327,15 @@
         }
       }
       return _results;
+    };
+
+
+    /*
+     */
+
+    LineChart.prototype.afterRender = function(c) {
+      console.log('zzz');
+      return console.log(c);
     };
 
 

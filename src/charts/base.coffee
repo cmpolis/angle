@@ -54,6 +54,9 @@ Angle.ChartBase = class Angle.ChartBase
 
     #
     @initialize(options) if @initialize?
+    @render = _.wrap @render, (renderFunc) =>
+      renderFunc()
+      @afterRender(@) if @afterRender?
     @fetchOrRender options.data
 
   ###
