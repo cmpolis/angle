@@ -9,21 +9,21 @@
 
   Angle.style = new (_Style = (function() {
     function _Style() {
-      this.color = __bind(this.color, this);
+      this._color = __bind(this._color, this);
     }
 
     _Style.prototype.palette = ["#5B5874", "#82D148", "#CF513A", "#C059CC", "#517240", "#D0B44D", "#80BEC7", "#BA4A7E", "#8AD59B", "#CFA8A9", "#86573A", "#7C7DCB"];
 
-    _Style.prototype.color = function(ndx) {
+    _Style.prototype._color = function(ndx) {
       if (ndx == null) {
         ndx = Math.floor(Math.random() * this.palette.length);
       }
       if (ndx < this.palette.length) {
         return this.palette[ndx];
       } else if (ndx < this.palette.length * 2) {
-        return d3.rgb(this.palette[ndx % palette.length]).brighter();
-      } else if (ndx < this.palette.length * 2) {
-        return d3.rgb(this.palette[ndx % palette.length]).darker();
+        return d3.rgb(this.palette[ndx % this.palette.length]).brighter().toString();
+      } else if (ndx < this.palette.length * 3) {
+        return d3.rgb(this.palette[ndx % this.palette.length]).darker().toString();
       } else {
         return this.color(ndx % (this.palette.length * 3));
       }
@@ -32,6 +32,8 @@
     return _Style;
 
   })());
+
+  Angle.color = Angle.style._color;
 
   Angle.settings = {};
 

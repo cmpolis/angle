@@ -1,3 +1,6 @@
+body {
+  font-family: "Source Sans Pro", sans-serif; }
+
 path, line {
   fill: none;
   stroke-width: 2.5px;
@@ -5,6 +8,9 @@ path, line {
 
 rect {
   fill: #80bec7; }
+
+text {
+  font-family: "Source Sans Pro", sans-serif; }
 
 .axis .tick line {
   stroke: #333333;

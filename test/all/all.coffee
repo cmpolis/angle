@@ -5,6 +5,15 @@
 test = () ->
 
   #
+  colorTests = [0...36].map (ndx) ->
+    d3.select '#palette'
+      .append 'div'
+        .style 'background-color', Angle.color(ndx)
+        .style 'height', '50px'
+        .style 'width', '50px'
+        .style 'display', 'inline-block'
+
+  #
   @barChart = new Angle.BarChart
     el:     '#bar-chart'
     height: 360

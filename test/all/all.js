@@ -3,6 +3,14 @@
   var test;
 
   test = function() {
+    var colorTests, _i, _results;
+    colorTests = (function() {
+      _results = [];
+      for (_i = 0; _i < 36; _i++){ _results.push(_i); }
+      return _results;
+    }).apply(this).map(function(ndx) {
+      return d3.select('#palette').append('div').style('background-color', Angle.color(ndx)).style('height', '50px').style('width', '50px').style('display', 'inline-block');
+    });
     this.barChart = new Angle.BarChart({
       el: '#bar-chart',
       height: 360,
