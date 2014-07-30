@@ -217,14 +217,17 @@
 
     BarChart.prototype.barPadding = 2;
 
+    BarChart.prototype.yMin = 0;
+
+    BarChart.prototype.yMax = null;
+
 
     /*
      */
 
     BarChart.prototype.initialize = function(options) {
       var property, _i, _len, _ref, _results;
-      console.log('init bar chart');
-      _ref = ['yAccessor', 'xAccessor', 'transform', 'barPadding'];
+      _ref = ['yAccessor', 'xAccessor', 'transform', 'barPadding', 'yMin', 'yMax'];
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         property = _ref[_i];
@@ -242,7 +245,7 @@
      */
 
     BarChart.prototype.afterFetch = function() {
-      var x, y;
+      var x, y, yExtent;
       if (this.transform != null) {
         this.transform();
       }
@@ -251,7 +254,8 @@
       } else {
         this.xScale = x = d3.scale.linear().range([0, this.width]).domain(d3.extent(this.data, this.xAccessor));
       }
-      this.yScale = y = d3.scale.linear().range([this.height, 0]).domain(d3.extent(this.data, this.yAccessor));
+      yExtent = d3.extent(_.union(this.data.map(this.yAccessor), [this.yMin, this.yMax]));
+      this.yScale = y = d3.scale.linear().range([this.height, 0]).domain(yExtent);
       return this.bars = this.svg.selectAll('g').data(this.data).enter().append('g');
     };
 
@@ -290,7 +294,6 @@
     function LineChart() {
       this.render = __bind(this.render, this);
       this.afterFetch = __bind(this.afterFetch, this);
-      this.afterRender = __bind(this.afterRender, this);
       this.initialize = __bind(this.initialize, this);
       return LineChart.__super__.constructor.apply(this, arguments);
     }
@@ -309,14 +312,17 @@
       return d[1];
     };
 
+    LineChart.prototype.yMin = null;
+
+    LineChart.prototype.yMax = null;
+
 
     /*
      */
 
     LineChart.prototype.initialize = function(options) {
       var property, _i, _len, _ref, _results;
-      console.log('init line chart');
-      _ref = ['interpolate', 'yAccessor', 'xAccessor', 'transform'];
+      _ref = ['interpolate', 'yAccessor', 'xAccessor', 'transform', 'yMin', 'yMax'];
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         property = _ref[_i];
@@ -333,17 +339,8 @@
     /*
      */
 
-    LineChart.prototype.afterRender = function(c) {
-      console.log('zzz');
-      return console.log(c);
-    };
-
-
-    /*
-     */
-
     LineChart.prototype.afterFetch = function() {
-      var x, y;
+      var x, y, yExtent;
       if (this.transform != null) {
         this.transform();
       }
@@ -352,7 +349,8 @@
       } else {
         this.xScale = x = d3.scale.linear().range([0, this.width]).domain(d3.extent(this.data, this.xAccessor));
       }
-      this.yScale = y = d3.scale.linear().range([this.height, 0]).domain(d3.extent(this.data, this.yAccessor));
+      yExtent = d3.extent(_.union(this.data.map(this.yAccessor), [this.yMin, this.yMax]));
+      this.yScale = y = d3.scale.linear().range([this.height, 0]).domain(yExtent);
       return this.line = d3.svg.line().interpolate(this.interpolate).x((function(_this) {
         return function(d) {
           return x(_this.xAccessor(d));

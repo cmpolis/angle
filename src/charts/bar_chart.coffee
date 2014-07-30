@@ -10,15 +10,14 @@ Angle.BarChart = class Angle.BarChart extends Angle.ChartBase
   xAccessor: (d) -> d[0]
   yAccessor: (d) -> d[1]
   barPadding: 2
+  yMin: 0
+  yMax: null
 
   ###
   ###
 
   initialize: (options) =>
-    console.log 'init bar chart'
-
-    #
-    for property in ['yAccessor', 'xAccessor', 'transform', 'barPadding']
+    for property in ['yAccessor', 'xAccessor', 'transform', 'barPadding', 'yMin', 'yMax']
       @[property] = options[property] if options[property]?
 
   ###
@@ -36,9 +35,11 @@ Angle.BarChart = class Angle.BarChart extends Angle.ChartBase
       @xScale = x = d3.scale.linear()
         .range  [0, @width]
         .domain d3.extent(@data, @xAccessor)
+
+    yExtent = d3.extent _.union(@data.map(@yAccessor), [@yMin, @yMax])
     @yScale = y = d3.scale.linear()
       .range  [@height, 0]
-      .domain d3.extent(@data, @yAccessor)
+      .domain yExtent
 
     # Bar selection
     @bars = @svg.selectAll('g')

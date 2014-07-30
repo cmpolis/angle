@@ -25,6 +25,7 @@ test = () ->
     el:     '#line-chart'
     height: 360
     width:  720
+    yMin: 0
     data:   [[1,30],[2,50],[3,35],[4,40],[5,52]]
 
   ###
