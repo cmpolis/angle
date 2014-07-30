@@ -4,11 +4,12 @@
 
 test = () ->
 
-  ###
+  #
   @barChart = new Angle.BarChart
     el: '#bar-chart'
-    data: []
-  ###
+    height: 360
+    width: 720
+    data: [[1,30],[2,50],[3,35],[4,40],[5,52]]
 
   #
   @lineChart = new Angle.LineChart

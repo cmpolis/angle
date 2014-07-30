@@ -3,12 +3,12 @@
   var test;
 
   test = function() {
-    /*
-    @barChart = new Angle.BarChart
-      el: '#bar-chart'
-      data: []
-    */
-
+    this.barChart = new Angle.BarChart({
+      el: '#bar-chart',
+      height: 360,
+      width: 720,
+      data: [[1, 30], [2, 50], [3, 35], [4, 40], [5, 52]]
+    });
     return this.lineChart = new Angle.LineChart({
       el: '#line-chart',
       height: 360,
