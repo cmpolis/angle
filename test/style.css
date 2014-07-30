@@ -6,7 +6,7 @@ path, line {
   stroke-width: 2.5px;
   stroke: #80bec7; }
 
-rect {
+rect, circle {
   fill: #80bec7; }
 
 text {

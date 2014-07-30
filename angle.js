@@ -445,7 +445,7 @@
         return function(d) {
           return _this.radius(d);
         };
-      })(this)).attr('fill', Angle.color(0)).attr('cx', (function(_this) {
+      })(this)).attr('cx', (function(_this) {
         return function(d) {
           return _this.xScale(_this.xAccessor(d));
         };

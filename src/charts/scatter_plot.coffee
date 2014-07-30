@@ -65,6 +65,5 @@ Angle.ScatterPlot = class Angle.ScatterPlot extends Angle.ChartBase
     @points
       .append 'circle'
         .attr 'r',    (d) => @radius(d)
-        .attr 'fill', Angle.color(0)
         .attr 'cx',   (d) => @xScale(@xAccessor(d))
         .attr 'cy',   (d) => @yScale(@yAccessor(d))
