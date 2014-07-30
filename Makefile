@@ -14,7 +14,7 @@ all: clean build
 build:
 	@echo
 	@echo Building angle.js source files...
-	coffee -cj angle.js src/angle.coffee src/style.coffee src/settings.coffee src/util/*.coffee src/charts/base.coffee src/charts/*_chart.coffee
+	coffee -cj angle.js src/angle.coffee src/style.coffee src/settings.coffee src/util/*.coffee src/charts/base.coffee src/charts/*_chart.coffee src/charts/scatter_plot.coffee
 
 #
 test: all

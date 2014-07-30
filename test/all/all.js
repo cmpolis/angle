@@ -17,7 +17,7 @@
       width: 720,
       data: [[1, 30], [2, 50], [3, 35], [4, 40], [5, 52]]
     });
-    return this.lineChart = new Angle.LineChart({
+    this.lineChart = new Angle.LineChart({
       el: '#line-chart',
       height: 360,
       width: 720,
@@ -29,11 +29,15 @@
     @ohlcChart = new Angle.OHLCChart
       el: '#ohlc-chart'
       data: []
-    
-     *
-    @scatterPlot = new Angle.ScatterPlot
-      el: '#scatter-plot'
-      data: []
+     */
+    return this.scatterPlot = new Angle.ScatterPlot({
+      el: '#scatter-plot',
+      height: 360,
+      width: 720,
+      data: [[1, 30], [2, 50], [3, 35], [4, 40], [5, 52]]
+    });
+
+    /*
     
      *
     @slopeograph = new Angle.Slopeograph

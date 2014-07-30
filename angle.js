@@ -252,13 +252,14 @@
      */
 
     BarChart.prototype.render = function() {
-      var barWidth;
+      var barWidth, offset;
       this.svg.append('g').attr('class', 'x axis').attr('transform', "translate(0, " + this.height + ")").call(this.xAxis());
       this.svg.append('g').attr('class', 'y axis').call(this.yAxis());
       barWidth = this.width / this.data.length;
+      offset = barWidth / 2 - this.barPadding / 2;
       return this.bars.attr('transform', (function(_this) {
         return function(d) {
-          return "translate(" + (_this.xScale(_this.xAccessor(d)) - barWidth / 2) + ",0)";
+          return "translate(" + (_this.xScale(_this.xAccessor(d)) - offset) + ",0)";
         };
       })(this)).append('rect').attr('y', (function(_this) {
         return function(d) {
@@ -368,5 +369,95 @@
     return OHLCChart;
 
   })();
+
+  Angle.ScatterPlot = Angle.ScatterPlot = (function(_super) {
+    __extends(ScatterPlot, _super);
+
+    function ScatterPlot() {
+      this.render = __bind(this.render, this);
+      this.afterFetch = __bind(this.afterFetch, this);
+      this.initialize = __bind(this.initialize, this);
+      return ScatterPlot.__super__.constructor.apply(this, arguments);
+    }
+
+
+    /*
+     */
+
+    ScatterPlot.prototype.xAccessor = function(d) {
+      return d[0];
+    };
+
+    ScatterPlot.prototype.yAccessor = function(d) {
+      return d[1];
+    };
+
+    ScatterPlot.prototype.radius = function(d) {
+      return 4.5;
+    };
+
+
+    /*
+     */
+
+    ScatterPlot.prototype.initialize = function(options) {
+      var property, _i, _len, _ref, _results;
+      console.log('init scatter plot');
+      _ref = ['yAccessor', 'xAccessor', 'transform', 'radius'];
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        property = _ref[_i];
+        if (options[property] != null) {
+          _results.push(this[property] = options[property]);
+        } else {
+          _results.push(void 0);
+        }
+      }
+      return _results;
+    };
+
+
+    /*
+     */
+
+    ScatterPlot.prototype.afterFetch = function() {
+      var x, y;
+      if (this.transform != null) {
+        this.transform();
+      }
+      if (this.xAccessor(this.data[0]) instanceof Date) {
+        this.xScale = x = d3.time.scale().range([0, this.width]).domain(d3.extent(this.data, this.xAccessor));
+      } else {
+        this.xScale = x = d3.scale.linear().range([0, this.width]).domain(d3.extent(this.data, this.xAccessor));
+      }
+      this.yScale = y = d3.scale.linear().range([this.height, 0]).domain(d3.extent(this.data, this.yAccessor));
+      return this.points = this.svg.selectAll('g').data(this.data).enter().append('g');
+    };
+
+
+    /*
+     */
+
+    ScatterPlot.prototype.render = function() {
+      this.svg.append('g').attr('class', 'x axis').attr('transform', "translate(0, " + this.height + ")").call(this.xAxis());
+      this.svg.append('g').attr('class', 'y axis').call(this.yAxis());
+      return this.points.append('circle').attr('r', (function(_this) {
+        return function(d) {
+          return _this.radius(d);
+        };
+      })(this)).attr('fill', Angle.color(0)).attr('cx', (function(_this) {
+        return function(d) {
+          return _this.xScale(_this.xAccessor(d));
+        };
+      })(this)).attr('cy', (function(_this) {
+        return function(d) {
+          return _this.yScale(_this.yAccessor(d));
+        };
+      })(this));
+    };
+
+    return ScatterPlot;
+
+  })(Angle.ChartBase);
 
 }).call(this);
