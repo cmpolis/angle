@@ -12,6 +12,7 @@ Angle.ChartBase = class Angle.ChartBase
     left:   40
   height: 600
   width:  600
+  grid:   false
 
   ###
   ###
@@ -47,6 +48,11 @@ Angle.ChartBase = class Angle.ChartBase
       .style height: @height, width: @width
       .append 'g'
         .attr 'transform', "translate(#{@padding.left},#{@padding.top})"
+
+    # Setup layers to act as z-index
+    @gridLayer = @svg.append 'g'
+    @axisLayer = @svg.append 'g'
+    @drawLayer = @svg.append 'g'
 
     #
     @width = @width - @padding.right - @padding.left

@@ -12,12 +12,13 @@ Angle.BarChart = class Angle.BarChart extends Angle.ChartBase
   barPadding: 2
   yMin: 0
   yMax: null
+  xMin: 0
 
   ###
   ###
 
   initialize: (options) =>
-    for property in ['yAccessor', 'xAccessor', 'transform', 'barPadding', 'yMin', 'yMax']
+    for property in ['yAccessor', 'xAccessor', 'transform', 'barPadding', 'yMin', 'yMax', 'xMin']
       @[property] = options[property] if options[property]?
 
   ###
@@ -30,11 +31,11 @@ Angle.BarChart = class Angle.BarChart extends Angle.ChartBase
     if @xAccessor(@data[0]) instanceof Date
       @xScale = x = d3.time.scale()
         .range [0, @width]
-        .domain d3.extent(@data, @xAccessor)
+        .domain [@xMin, d3.max(@data, @xAccessor)]
     else
       @xScale = x = d3.scale.linear()
         .range  [0, @width]
-        .domain d3.extent(@data, @xAccessor)
+        .domain [@xMin, d3.max(@data, @xAccessor)]
 
     yExtent = d3.extent _.union(@data.map(@yAccessor), [@yMin, @yMax])
     @yScale = y = d3.scale.linear()
@@ -42,7 +43,7 @@ Angle.BarChart = class Angle.BarChart extends Angle.ChartBase
       .domain yExtent
 
     # Bar selection
-    @bars = @svg.selectAll('g')
+    @bars = @drawLayer.selectAll('g')
       .data(@data).enter()
       .append 'g'
 
@@ -52,17 +53,17 @@ Angle.BarChart = class Angle.BarChart extends Angle.ChartBase
   render: () =>
 
     # Render x axis
-    @svg.append 'g'
+    @axisLayer.append 'g'
       .attr 'class', 'x axis'
       .attr 'transform', "translate(0, #{@height})"
       .call @xAxis()
 
     # Render y axis
-    @svg.append 'g'
+    @axisLayer.append 'g'
       .attr 'class', 'y axis'
       .call @yAxis()
 
-    #
+    # Render bars
     barWidth = @width / @data.length
     offset   = barWidth/2 - @barPadding/2
     @bars

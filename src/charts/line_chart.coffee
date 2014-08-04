@@ -17,7 +17,7 @@ Angle.LineChart = class Angle.LineChart extends Angle.ChartBase
   ###
 
   initialize: (options) =>
-    for property in ['interpolate', 'yAccessor', 'xAccessor', 'transform', 'yMin', 'yMax']
+    for property in ['interpolate', 'yAccessor', 'xAccessor', 'transform', 'yMin', 'yMax', 'grid']
       @[property] = options[property] if options[property]?
 
   ###
@@ -54,16 +54,25 @@ Angle.LineChart = class Angle.LineChart extends Angle.ChartBase
   render: () =>
 
     # Render x axis
-    @svg.append 'g'
+    @axisLayer.append 'g'
       .attr 'class', 'x axis'
       .attr 'transform', "translate(0, #{@height})"
       .call @xAxis()
 
     # Render y axis
-    @svg.append 'g'
+    @axisLayer.append 'g'
       .attr 'class', 'y axis'
       .call @yAxis()
 
     # Render data lines
-    @svg.append 'path'
+    @drawLayer.append 'path'
       .attr 'd', @line(@data)
+
+    # Render grid
+    if @grid
+      @gridLayer.append 'g'
+        .attr 'class', 'grid x'
+          .call @xAxis().tickSize(@height, 0, 0).tickFormat('')
+      @gridLayer.append 'g'
+        .attr 'class', 'grid y'
+          .call @yAxis().tickSize(@width, 0, 0).tickFormat('').orient('right')

@@ -51,6 +51,8 @@
 
     ChartBase.prototype.width = 600;
 
+    ChartBase.prototype.grid = false;
+
 
     /*
      */
@@ -92,6 +94,9 @@
         height: this.height,
         width: this.width
       }).append('g').attr('transform', "translate(" + this.padding.left + "," + this.padding.top + ")");
+      this.gridLayer = this.svg.append('g');
+      this.axisLayer = this.svg.append('g');
+      this.drawLayer = this.svg.append('g');
       this.width = this.width - this.padding.right - this.padding.left;
       this.height = this.height - this.padding.top - this.padding.bottom;
       if (this.initialize != null) {
@@ -221,13 +226,15 @@
 
     BarChart.prototype.yMax = null;
 
+    BarChart.prototype.xMin = 0;
+
 
     /*
      */
 
     BarChart.prototype.initialize = function(options) {
       var property, _i, _len, _ref, _results;
-      _ref = ['yAccessor', 'xAccessor', 'transform', 'barPadding', 'yMin', 'yMax'];
+      _ref = ['yAccessor', 'xAccessor', 'transform', 'barPadding', 'yMin', 'yMax', 'xMin'];
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         property = _ref[_i];
@@ -250,13 +257,13 @@
         this.transform();
       }
       if (this.xAccessor(this.data[0]) instanceof Date) {
-        this.xScale = x = d3.time.scale().range([0, this.width]).domain(d3.extent(this.data, this.xAccessor));
+        this.xScale = x = d3.time.scale().range([0, this.width]).domain([this.xMin, d3.max(this.data, this.xAccessor)]);
       } else {
-        this.xScale = x = d3.scale.linear().range([0, this.width]).domain(d3.extent(this.data, this.xAccessor));
+        this.xScale = x = d3.scale.linear().range([0, this.width]).domain([this.xMin, d3.max(this.data, this.xAccessor)]);
       }
       yExtent = d3.extent(_.union(this.data.map(this.yAccessor), [this.yMin, this.yMax]));
       this.yScale = y = d3.scale.linear().range([this.height, 0]).domain(yExtent);
-      return this.bars = this.svg.selectAll('g').data(this.data).enter().append('g');
+      return this.bars = this.drawLayer.selectAll('g').data(this.data).enter().append('g');
     };
 
 
@@ -265,8 +272,8 @@
 
     BarChart.prototype.render = function() {
       var barWidth, offset;
-      this.svg.append('g').attr('class', 'x axis').attr('transform', "translate(0, " + this.height + ")").call(this.xAxis());
-      this.svg.append('g').attr('class', 'y axis').call(this.yAxis());
+      this.axisLayer.append('g').attr('class', 'x axis').attr('transform', "translate(0, " + this.height + ")").call(this.xAxis());
+      this.axisLayer.append('g').attr('class', 'y axis').call(this.yAxis());
       barWidth = this.width / this.data.length;
       offset = barWidth / 2 - this.barPadding / 2;
       return this.bars.attr('transform', (function(_this) {
@@ -322,7 +329,7 @@
 
     LineChart.prototype.initialize = function(options) {
       var property, _i, _len, _ref, _results;
-      _ref = ['interpolate', 'yAccessor', 'xAccessor', 'transform', 'yMin', 'yMax'];
+      _ref = ['interpolate', 'yAccessor', 'xAccessor', 'transform', 'yMin', 'yMax', 'grid'];
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         property = _ref[_i];
@@ -367,9 +374,13 @@
      */
 
     LineChart.prototype.render = function() {
-      this.svg.append('g').attr('class', 'x axis').attr('transform', "translate(0, " + this.height + ")").call(this.xAxis());
-      this.svg.append('g').attr('class', 'y axis').call(this.yAxis());
-      return this.svg.append('path').attr('d', this.line(this.data));
+      this.axisLayer.append('g').attr('class', 'x axis').attr('transform', "translate(0, " + this.height + ")").call(this.xAxis());
+      this.axisLayer.append('g').attr('class', 'y axis').call(this.yAxis());
+      this.drawLayer.append('path').attr('d', this.line(this.data));
+      if (this.grid) {
+        this.gridLayer.append('g').attr('class', 'grid x').call(this.xAxis().tickSize(this.height, 0, 0).tickFormat(''));
+        return this.gridLayer.append('g').attr('class', 'grid y').call(this.yAxis().tickSize(this.width, 0, 0).tickFormat('').orient('right'));
+      }
     };
 
     return LineChart;
@@ -419,7 +430,7 @@
     ScatterPlot.prototype.initialize = function(options) {
       var property, _i, _len, _ref, _results;
       console.log('init scatter plot');
-      _ref = ['yAccessor', 'xAccessor', 'transform', 'radius'];
+      _ref = ['yAccessor', 'xAccessor', 'transform', 'radius', 'grid'];
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         property = _ref[_i];
@@ -447,7 +458,7 @@
         this.xScale = x = d3.scale.linear().range([0, this.width]).domain(d3.extent(this.data, this.xAccessor));
       }
       this.yScale = y = d3.scale.linear().range([this.height, 0]).domain(d3.extent(this.data, this.yAccessor));
-      return this.points = this.svg.selectAll('g').data(this.data).enter().append('g');
+      return this.points = this.drawLayer.selectAll('g').data(this.data).enter().append('g');
     };
 
 
@@ -455,9 +466,9 @@
      */
 
     ScatterPlot.prototype.render = function() {
-      this.svg.append('g').attr('class', 'x axis').attr('transform', "translate(0, " + this.height + ")").call(this.xAxis());
-      this.svg.append('g').attr('class', 'y axis').call(this.yAxis());
-      return this.points.append('circle').attr('r', (function(_this) {
+      this.axisLayer.append('g').attr('class', 'x axis').attr('transform', "translate(0, " + this.height + ")").call(this.xAxis());
+      this.axisLayer.append('g').attr('class', 'y axis').call(this.yAxis());
+      this.points.append('circle').attr('r', (function(_this) {
         return function(d) {
           return _this.radius(d);
         };
@@ -470,6 +481,10 @@
           return _this.yScale(_this.yAccessor(d));
         };
       })(this));
+      if (this.grid) {
+        this.gridLayer.append('g').attr('class', 'grid x').call(this.xAxis().tickSize(this.height, 0, 0).tickFormat(''));
+        return this.gridLayer.append('g').attr('class', 'grid y').call(this.yAxis().tickSize(this.width, 0, 0).tickFormat('').orient('right'));
+      }
     };
 
     return ScatterPlot;

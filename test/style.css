@@ -20,3 +20,9 @@ text {
 .axis path {
   stroke: #333333;
   stroke-width: 1px; }
+
+.grid .domain {
+  display: none; }
+.grid line {
+  stroke: #dddddd;
+  stroke-width: 1px; }

@@ -18,7 +18,7 @@ Angle.ScatterPlot = class Angle.ScatterPlot extends Angle.ChartBase
     console.log 'init scatter plot'
 
     #
-    for property in ['yAccessor', 'xAccessor', 'transform', 'radius']
+    for property in ['yAccessor', 'xAccessor', 'transform', 'radius', 'grid']
       @[property] = options[property] if options[property]?
 
   ###
@@ -41,7 +41,7 @@ Angle.ScatterPlot = class Angle.ScatterPlot extends Angle.ChartBase
       .domain d3.extent(@data, @yAccessor)
 
     # Bar selection
-    @points = @svg.selectAll 'g'
+    @points = @drawLayer.selectAll 'g'
       .data(@data).enter()
       .append 'g'
 
@@ -51,19 +51,28 @@ Angle.ScatterPlot = class Angle.ScatterPlot extends Angle.ChartBase
   render: () =>
 
     # Render x axis
-    @svg.append('g')
+    @axisLayer.append('g')
       .attr 'class', 'x axis'
       .attr 'transform', "translate(0, #{@height})"
       .call @xAxis()
 
     # Render y axis
-    @svg.append('g')
+    @axisLayer.append('g')
       .attr 'class', 'y axis'
       .call @yAxis()
 
-    #
+    # Render points
     @points
       .append 'circle'
         .attr 'r',    (d) => @radius(d)
         .attr 'cx',   (d) => @xScale(@xAccessor(d))
         .attr 'cy',   (d) => @yScale(@yAccessor(d))
+
+    # Render grid
+    if @grid
+      @gridLayer.append 'g'
+        .attr 'class', 'grid x'
+          .call @xAxis().tickSize(@height, 0, 0).tickFormat('')
+      @gridLayer.append 'g'
+        .attr 'class', 'grid y'
+          .call @yAxis().tickSize(@width, 0, 0).tickFormat('').orient('right')
